@@ -9,21 +9,22 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#Importing the dataset
 train=pd.read_csv('train.csv')
 test=pd.read_csv('test.csv')
 X=train.iloc[ : ,[0,2,4,5,6,7]]
 Y=train.iloc[ : , 1:2]
 
+#Missing Values
+X=X.fillna(X.mean())
 
+#Dummy Variables
+X=pd.get_dummies(X)
 
 #Feature Scaling
 from sklearn.preprocessing import StandardScaler
-sc_X=StandardScaler()
-X=sc_X.fit_transform(X)
-test=sc_X.fit_transform(test)
-
-#Dummy Variables
-
-from sklearn.preprocessing import LabelEncoder
-labelencoder_X=LabelEncoder()
-X[: ,2]=labelencoder_X.fit_transform(X[: ,2])
+col_names=['Pclass','Age','SibSp','Parch']
+features = X[col_names]
+scaler = StandardScaler().fit(features.values)
+features = scaler.transform(features.values)
+X[col_names]= features
